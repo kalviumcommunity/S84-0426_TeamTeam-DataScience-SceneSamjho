@@ -7,9 +7,9 @@ interface Insight {
 }
 
 const typeConfig = {
-  danger: { icon: AlertTriangle, color: "var(--neon-red)", borderColor: "hsl(var(--neon-red) / 0.4)" },
-  warning: { icon: AlertCircle, color: "var(--neon-amber)", borderColor: "hsl(var(--neon-amber) / 0.4)" },
-  info: { icon: Info, color: "var(--neon-cyan)", borderColor: "hsl(var(--neon-cyan) / 0.4)" },
+  danger: { icon: AlertTriangle, badge: "badge-danger" },
+  warning: { icon: AlertCircle, badge: "badge-warning" },
+  info: { icon: Info, badge: "badge-info" },
 };
 
 export default function InsightCards({ insights }: { insights: Insight[] }) {
@@ -22,14 +22,15 @@ export default function InsightCards({ insights }: { insights: Insight[] }) {
           <motion.div
             key={i}
             className="insight-card"
-            style={{ borderLeftColor: config.borderColor }}
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
+            transition={{ duration: 0.3, delay: i * 0.08 }}
           >
             <div className="flex items-start gap-3">
-              <Icon className="w-4 h-4 mt-0.5 shrink-0" style={{ color: `hsl(${config.color})` }} />
-              <p className="text-sm text-secondary-foreground">{insight.text}</p>
+              <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${config.badge}`}>
+                <Icon className="w-3.5 h-3.5" />
+              </div>
+              <p className="text-sm text-foreground/80 leading-relaxed">{insight.text}</p>
             </div>
           </motion.div>
         );

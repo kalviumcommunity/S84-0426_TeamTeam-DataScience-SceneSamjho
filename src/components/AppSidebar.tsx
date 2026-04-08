@@ -15,37 +15,30 @@ export default function AppSidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-64 min-h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
-      <div className="p-6 border-b border-sidebar-border">
+    <aside className="w-60 min-h-screen bg-sidebar border-r border-sidebar-border flex flex-col">
+      <div className="p-5 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Activity className="w-5 h-5 text-primary" />
+          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+            <Activity className="w-4 h-4 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-display text-sm font-bold gradient-text">ACCIDENT</h1>
-            <p className="font-display text-xs text-primary">INSIGHT ENGINE</p>
+            <h1 className="font-display text-sm font-bold text-foreground tracking-tight">Accident</h1>
+            <p className="text-[11px] text-muted-foreground font-medium">Insight Engine</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-3 space-y-0.5">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to;
           return (
             <NavLink key={item.to} to={item.to}>
               <motion.div
                 className={`sidebar-nav-item ${isActive ? "active" : ""}`}
-                whileHover={{ x: 4 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <item.icon className="w-4 h-4" />
                 <span>{item.label}</span>
-                {isActive && (
-                  <motion.div
-                    className="ml-auto pulse-dot"
-                    layoutId="nav-indicator"
-                  />
-                )}
               </motion.div>
             </NavLink>
           );
@@ -53,12 +46,9 @@ export default function AppSidebar() {
       </nav>
 
       <div className="p-4 border-t border-sidebar-border">
-        <div className="glass-card p-3">
-          <p className="text-xs text-muted-foreground">System Status</p>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="pulse-dot" />
-            <span className="text-xs text-neon-green">All systems operational</span>
-          </div>
+        <div className="flex items-center gap-2 px-3">
+          <div className="pulse-dot" />
+          <span className="text-xs text-muted-foreground">System operational</span>
         </div>
       </div>
     </aside>
