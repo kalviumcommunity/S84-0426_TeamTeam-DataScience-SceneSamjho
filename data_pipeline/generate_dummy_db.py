@@ -3,8 +3,11 @@ import random
 from datetime import datetime, timedelta
 from faker import Faker
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.database import AsyncSessionLocal
-from backend.models import Accident
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'backend'))
+from database import AsyncSessionLocal
+from models import Accident
 
 fake = Faker('en_IN')  # Use Indian locale for Faker
 
@@ -112,5 +115,5 @@ async def seed_database(num_records: int = 100):
             print(f"❌ Error seeding database: {e}")
 
 if __name__ == "__main__":
-    # We will run this script with a small batch initially as requested
-    asyncio.run(seed_database(100))
+    # Insert 4900 more records in chunks to create 5000 records
+    asyncio.run(seed_database(4900))
