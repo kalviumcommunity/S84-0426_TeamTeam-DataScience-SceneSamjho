@@ -17,7 +17,7 @@ To ensure parallel development and avoid Git merge conflicts, the project has be
 ### 🧑‍💻 Avinash: Backend Architecture & Data Processing Engine
 *Role Focus: Database construction, Data Pipeline generation, and Python/Pandas Analytics Engine.*
 
-*   **Task 1: Relational Database Architecture:** Design, provision, and deploy the PostgreSQL database schema (Tables, Enums, UUIDs) to ensure strict data integrity.
+*   **Task 1: Relational Database Architecture:** Design, provision, and deploy the PostgreSQL database schema (Tables, Enums, UUIDs) to ensure strict data integrity.: Avinash has done it 
 *   **Task 2: Historical Data Pipeline Engine:** Write the Python/Faker automation script to generate 5,000+ localized, statistically relevant dummy records simulating years of Indian traffic accident data.
 *   **Task 3: Core API Gateway Construction:** Initialize and configure the FastAPI server, setting up CORS, environment variables, and asynchronous database connection pooling.
 *   **Task 4: Data Science & Analytics Endpoints:** Utilize Pandas and NumPy to write the complex querying and data aggregation logic. Build the GET endpoints that calculate KPI percentages, time-series trends, and categorical cross-referencing.
