@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, Boolean, Integer, Date, Time
 from sqlalchemy.dialects.postgresql import UUID
-from backend.database import Base
+from database import Base
 
 class Accident(Base):
     __tablename__ = "accidents"
