@@ -1,0 +1,108 @@
+:root {
+  --analytics-bg: #f7f9fc;
+  --analytics-surface: #ffffff;
+  --analytics-border: #e4e8ef;
+  --analytics-title: #17223b;
+  --analytics-text: #556079;
+  --analytics-placeholder-bg: #f1f4fa;
+}
+
+.analytics-page {
+  background: var(--analytics-bg);
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.analytics-page__header h1 {
+  margin: 0;
+  color: var(--analytics-title);
+  font-size: 1.75rem;
+}
+
+.analytics-page__header p {
+  margin: 8px 0 20px;
+  color: var(--analytics-text);
+  max-width: 780px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.analytics-section {
+  grid-column: span 12;
+  background: var(--analytics-surface);
+  border: 1px solid var(--analytics-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.analytics-grid__double {
+  grid-column: span 12;
+}
+
+.analytics-section__header h2 {
+  margin: 0;
+  color: var(--analytics-title);
+  font-size: 1.05rem;
+}
+
+.analytics-section__header p {
+  margin: 6px 0 14px;
+  color: var(--analytics-text);
+  font-size: 0.92rem;
+}
+
+.placeholder-panel {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--analytics-border);
+  border-radius: 10px;
+  background: var(--analytics-placeholder-bg);
+  color: var(--analytics-text);
+  font-weight: 600;
+}
+
+.analytics-grid__split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .analytics-page {
+    padding: 28px;
+  }
+
+  .analytics-grid > .analytics-section:first-child {
+    grid-column: span 12;
+  }
+
+  .analytics-grid > .analytics-section:nth-child(2) {
+    grid-column: span 7;
+  }
+
+  .analytics-grid__double {
+    grid-column: span 5;
+  }
+}
+
+@media (min-width: 1100px) {
+  .analytics-page {
+    padding: 32px;
+  }
+
+  .analytics-grid > .analytics-section:first-child {
+    grid-column: span 12;
+  }
+
+  .analytics-grid > .analytics-section:nth-child(2) {
+    grid-column: span 8;
+  }
+
+  .analytics-grid__double {
+    grid-column: span 4;
+  }
+}
