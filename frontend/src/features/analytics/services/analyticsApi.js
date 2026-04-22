@@ -15,15 +15,33 @@ export async function fetchAnalyticsSnapshot() {
     fetch(`${API_BASE_URL}/analytics/indian-context/`),
   ]);
 
-  const [kpis, trendData, contextData] = await Promise.all([
+  const settledPayloads = await Promise.allSettled([
     parseResponse(kpisResponse, "KPI data"),
     parseResponse(trendsResponse, "trend data"),
     parseResponse(contextResponse, "Indian context data"),
   ]);
 
+  const [kpiResult, trendResult, contextResult] = settledPayloads;
+
+  const successCount = settledPayloads.filter((item) => item.status === "fulfilled").length;
+
+  if (successCount === 0) {
+    throw new Error("Failed to fetch all analytics endpoints");
+  }
+
+  const warning =
+    successCount < 3
+      ? "Some analytics panels could not be refreshed. Showing latest available fallback values."
+      : "";
+
   return {
-    kpis: kpis || {},
-    trendData: Array.isArray(trendData) ? trendData : [],
-    contextData: contextData || {},
+    kpis: kpiResult.status === "fulfilled" && kpiResult.value ? kpiResult.value : {},
+    trendData:
+      trendResult.status === "fulfilled" && Array.isArray(trendResult.value)
+        ? trendResult.value
+        : [],
+    contextData:
+      contextResult.status === "fulfilled" && contextResult.value ? contextResult.value : {},
+    warning,
   };
 }
