@@ -16,6 +16,7 @@ export function AnalyticsDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
   const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
   const isMountedRef = useRef(true);
 
   const loadAnalytics = useCallback(async ({ showLoader = false } = {}) => {
@@ -25,6 +26,7 @@ export function AnalyticsDashboard() {
 
     if (isMountedRef.current) {
       setError("");
+      setWarning("");
     }
 
     try {
@@ -37,11 +39,12 @@ export function AnalyticsDashboard() {
       setKpis(snapshot.kpis);
       setTrendData(snapshot.trendData);
       setContextData(snapshot.contextData);
-      setError(snapshot.warning || "");
+      setWarning(snapshot.warning || "");
       setLastUpdatedAt(new Date());
     } catch (requestError) {
       if (isMountedRef.current) {
         setError("Analytics API unavailable. Showing fallback where possible.");
+        setWarning("");
       }
     } finally {
       if (!isMountedRef.current) {
@@ -99,6 +102,11 @@ export function AnalyticsDashboard() {
               : "Waiting for first data sync..."}
           </span>
         </div>
+        {warning ? (
+          <div className="analytics-warning-banner" role="status" aria-live="polite">
+            {warning}
+          </div>
+        ) : null}
       </header>
 
       <section className="analytics-grid" aria-label="Analytics visualization grid">
