@@ -31,9 +31,21 @@ function getWrongWaySeverityData(data) {
   }));
 }
 
-export function IndianContextCharts({ data = {} }) {
+export function IndianContextCharts({ data = {}, isLoading = false, error = "" }) {
+  if (isLoading) {
+    return <div className="chart-state">Loading context charts…</div>;
+  }
+
+  if (error) {
+    return <div className="chart-state chart-state--error">{error}</div>;
+  }
+
   const hazardData = getHazardBreakdown(data);
   const severityData = getWrongWaySeverityData(data);
+
+  if (!severityData.length && hazardData.every((item) => item.value === 0)) {
+    return <div className="chart-state">No context data available yet.</div>;
+  }
 
   return (
     <div className="analytics-grid__split" aria-label="Indian context charts">

@@ -13,7 +13,19 @@ function formatKpiValue(value) {
   return value;
 }
 
-export function KpiCards({ data = {} }) {
+export function KpiCards({ data = {}, isLoading = false, error = "" }) {
+  if (isLoading) {
+    return <div className="chart-state">Loading KPI snapshot…</div>;
+  }
+
+  if (error) {
+    return <div className="chart-state chart-state--error">{error}</div>;
+  }
+
+  if (!data || Object.keys(data).length === 0) {
+    return <div className="chart-state">No KPI data available yet.</div>;
+  }
+
   return (
     <div className="kpi-grid" aria-label="KPI cards">
       {KPI_ITEMS.map((item) => (

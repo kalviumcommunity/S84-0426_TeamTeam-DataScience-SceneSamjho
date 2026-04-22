@@ -1,35 +1,58 @@
+import { useEffect, useState } from "react";
 import "../styles/analytics.css";
 import { AnalyticsSection } from "../components/AnalyticsSection";
 import { KpiCards } from "../components/KpiCards";
 import { TimeSeriesTrendChart } from "../components/TimeSeriesTrendChart";
 import { IndianContextCharts } from "../components/IndianContextCharts";
+import { fetchAnalyticsSnapshot } from "../services/analyticsApi";
 
-const KPI_SAMPLE_DATA = {
-  total_accidents: 1384,
-  total_fatalities: 212,
-  top_hazard_weather: "Heavy Rain",
-  top_hazard_road: "Potholes",
-};
-
-const TREND_SAMPLE_DATA = [
-  { timeBucket: "Morning (6AM-12PM)", Minor: 42, Major: 30, Fatal: 12, total: 84 },
-  { timeBucket: "Afternoon (12PM-4PM)", Minor: 36, Major: 29, Fatal: 10, total: 75 },
-  { timeBucket: "Evening (4PM-8PM)", Minor: 55, Major: 34, Fatal: 14, total: 103 },
-  { timeBucket: "Night (8PM-6AM)", Minor: 48, Major: 38, Fatal: 16, total: 102 },
-];
-
-const INDIAN_CONTEXT_SAMPLE_DATA = {
-  stray_animals_accidents: 117,
-  wrong_way_accidents: 92,
-  pothole_related: 148,
-  severity_distribution_wrong_way: {
-    Minor: 39,
-    Major: 33,
-    Fatal: 20,
-  },
-};
+const POLLING_INTERVAL_MS = 60000;
 
 export function AnalyticsDashboard() {
+  const [kpis, setKpis] = useState({});
+  const [trendData, setTrendData] = useState([]);
+  const [contextData, setContextData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadAnalytics() {
+      try {
+        if (isActive) {
+          setError("");
+        }
+
+        const snapshot = await fetchAnalyticsSnapshot();
+
+        if (!isActive) {
+          return;
+        }
+
+        setKpis(snapshot.kpis);
+        setTrendData(snapshot.trendData);
+        setContextData(snapshot.contextData);
+      } catch (requestError) {
+        if (isActive) {
+          setError("Analytics API unavailable. Showing fallback where possible.");
+        }
+      } finally {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadAnalytics();
+    const intervalId = setInterval(loadAnalytics, POLLING_INTERVAL_MS);
+
+    return () => {
+      isActive = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <main className="analytics-page" aria-label="Analytics dashboard">
       <header className="analytics-page__header">
@@ -46,7 +69,7 @@ export function AnalyticsDashboard() {
           title="KPI Snapshot"
           description="Top-level cards for accident totals and hazard highlights"
         >
-          <KpiCards data={KPI_SAMPLE_DATA} />
+          <KpiCards data={kpis} isLoading={isLoading} error={error} />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -54,7 +77,7 @@ export function AnalyticsDashboard() {
           title="Accident Trend by Time"
           description="Line chart area for morning, afternoon, evening, and night trends"
         >
-          <TimeSeriesTrendChart data={TREND_SAMPLE_DATA} />
+          <TimeSeriesTrendChart data={trendData} isLoading={isLoading} error={error} />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -62,7 +85,7 @@ export function AnalyticsDashboard() {
           title="Indian Context Correlations"
           description="Pie and bar charts for wrong-way, potholes, and severity context"
         >
-          <IndianContextCharts data={INDIAN_CONTEXT_SAMPLE_DATA} />
+          <IndianContextCharts data={contextData} isLoading={isLoading} error={error} />
         </AnalyticsSection>
       </section>
     </main>
