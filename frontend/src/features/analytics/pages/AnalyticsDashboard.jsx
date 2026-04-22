@@ -2,6 +2,7 @@ import "../styles/analytics.css";
 import { AnalyticsSection } from "../components/AnalyticsSection";
 import { PlaceholderPanel } from "../components/PlaceholderPanel";
 import { KpiCards } from "../components/KpiCards";
+import { TimeSeriesTrendChart } from "../components/TimeSeriesTrendChart";
 
 const KPI_SAMPLE_DATA = {
   total_accidents: 1384,
@@ -9,6 +10,13 @@ const KPI_SAMPLE_DATA = {
   top_hazard_weather: "Heavy Rain",
   top_hazard_road: "Potholes",
 };
+
+const TREND_SAMPLE_DATA = [
+  { timeBucket: "Morning (6AM-12PM)", Minor: 42, Major: 30, Fatal: 12, total: 84 },
+  { timeBucket: "Afternoon (12PM-4PM)", Minor: 36, Major: 29, Fatal: 10, total: 75 },
+  { timeBucket: "Evening (4PM-8PM)", Minor: 55, Major: 34, Fatal: 14, total: 103 },
+  { timeBucket: "Night (8PM-6AM)", Minor: 48, Major: 38, Fatal: 16, total: 102 },
+];
 
 export function AnalyticsDashboard() {
   return (
@@ -35,7 +43,7 @@ export function AnalyticsDashboard() {
           title="Accident Trend by Time"
           description="Line chart area for morning, afternoon, evening, and night trends"
         >
-          <PlaceholderPanel label="Time-Series Chart Placeholder" minHeight={320} />
+          <TimeSeriesTrendChart data={TREND_SAMPLE_DATA} />
         </AnalyticsSection>
 
         <AnalyticsSection
