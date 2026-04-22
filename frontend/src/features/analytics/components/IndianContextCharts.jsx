@@ -31,13 +31,33 @@ function getWrongWaySeverityData(data) {
   }));
 }
 
-export function IndianContextCharts({ data = {}, isLoading = false, error = "" }) {
+export function IndianContextCharts({
+  data = {},
+  isLoading = false,
+  error = "",
+  onRetry,
+  isRetrying = false,
+}) {
   if (isLoading) {
     return <div className="chart-state">Loading context charts…</div>;
   }
 
   if (error) {
-    return <div className="chart-state chart-state--error">{error}</div>;
+    return (
+      <div className="chart-state chart-state--error">
+        <p>{error}</p>
+        {onRetry ? (
+          <button
+            type="button"
+            className="chart-state__action"
+            onClick={onRetry}
+            disabled={isRetrying}
+          >
+            {isRetrying ? "Retrying..." : "Retry"}
+          </button>
+        ) : null}
+      </div>
+    );
   }
 
   const hazardData = getHazardBreakdown(data);

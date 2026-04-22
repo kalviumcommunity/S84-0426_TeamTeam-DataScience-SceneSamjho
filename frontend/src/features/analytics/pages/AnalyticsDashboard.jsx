@@ -144,7 +144,13 @@ export function AnalyticsDashboard() {
           title="KPI Snapshot"
           description="Top-level cards for accident totals and hazard highlights"
         >
-          <KpiCards data={kpis} isLoading={isLoading} error={error} />
+          <KpiCards
+            data={kpis}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleManualRefresh}
+            isRetrying={isRefreshing}
+          />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -152,7 +158,13 @@ export function AnalyticsDashboard() {
           title="Accident Trend by Time"
           description="Line chart area for morning, afternoon, evening, and night trends"
         >
-          <TimeSeriesTrendChart data={trendData} isLoading={isLoading} error={error} />
+          <TimeSeriesTrendChart
+            data={trendData}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleManualRefresh}
+            isRetrying={isRefreshing}
+          />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -160,7 +172,13 @@ export function AnalyticsDashboard() {
           title="Indian Context Correlations"
           description="Pie and bar charts for wrong-way, potholes, and severity context"
         >
-          <IndianContextCharts data={contextData} isLoading={isLoading} error={error} />
+          <IndianContextCharts
+            data={contextData}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleManualRefresh}
+            isRetrying={isRefreshing}
+          />
         </AnalyticsSection>
       </section>
     </main>
