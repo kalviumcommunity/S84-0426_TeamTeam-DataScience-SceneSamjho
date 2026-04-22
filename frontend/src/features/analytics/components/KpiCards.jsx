@@ -1,13 +1,17 @@
 const KPI_ITEMS = [
-  { key: "total_accidents", label: "Total Accidents" },
-  { key: "total_fatalities", label: "Total Fatalities" },
-  { key: "top_hazard_weather", label: "Top Hazard Weather" },
-  { key: "top_hazard_road", label: "Top Hazard Road" },
+  { key: "total_accidents", label: "Total Accidents", valueType: "number" },
+  { key: "total_fatalities", label: "Total Fatalities", valueType: "number" },
+  { key: "top_hazard_weather", label: "Top Hazard Weather", valueType: "text" },
+  { key: "top_hazard_road", label: "Top Hazard Road", valueType: "text" },
 ];
 
-function formatKpiValue(value) {
+function formatKpiValue(value, valueType) {
   if (value === null || value === undefined || value === "") {
     return "N/A";
+  }
+
+  if (valueType === "number" && typeof value === "number") {
+    return value.toLocaleString("en-IN");
   }
 
   return value;
@@ -31,7 +35,9 @@ export function KpiCards({ data = {}, isLoading = false, error = "" }) {
       {KPI_ITEMS.map((item) => (
         <article key={item.key} className="kpi-card">
           <h3>{item.label}</h3>
-          <p>{formatKpiValue(data[item.key])}</p>
+          <p className={item.valueType === "text" ? "kpi-card__value kpi-card__value--text" : "kpi-card__value"}>
+            {formatKpiValue(data[item.key], item.valueType)}
+          </p>
         </article>
       ))}
     </div>
