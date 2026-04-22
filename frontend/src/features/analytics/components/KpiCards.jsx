@@ -17,13 +17,33 @@ function formatKpiValue(value, valueType) {
   return value;
 }
 
-export function KpiCards({ data = {}, isLoading = false, error = "" }) {
+export function KpiCards({
+  data = {},
+  isLoading = false,
+  error = "",
+  onRetry,
+  isRetrying = false,
+}) {
   if (isLoading) {
     return <div className="chart-state">Loading KPI snapshot…</div>;
   }
 
   if (error) {
-    return <div className="chart-state chart-state--error">{error}</div>;
+    return (
+      <div className="chart-state chart-state--error">
+        <p>{error}</p>
+        {onRetry ? (
+          <button
+            type="button"
+            className="chart-state__action"
+            onClick={onRetry}
+            disabled={isRetrying}
+          >
+            {isRetrying ? "Retrying..." : "Retry"}
+          </button>
+        ) : null}
+      </div>
+    );
   }
 
   if (!data || Object.keys(data).length === 0) {

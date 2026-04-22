@@ -86,9 +86,33 @@ function normalizeTrendData(data, useFallback = false) {
   return normalized;
 }
 
-export function TimeSeriesTrendChart({ data = [], isLoading = false, error = "" }) {
+export function TimeSeriesTrendChart({
+  data = [],
+  isLoading = false,
+  error = "",
+  onRetry,
+  isRetrying = false,
+}) {
   if (isLoading) {
     return <div className="chart-state">Loading time-series trend…</div>;
+  }
+
+  if (error && (!Array.isArray(data) || data.length === 0)) {
+    return (
+      <div className="chart-state chart-state--error">
+        <p>{error}</p>
+        {onRetry ? (
+          <button
+            type="button"
+            className="chart-state__action"
+            onClick={onRetry}
+            disabled={isRetrying}
+          >
+            {isRetrying ? "Retrying..." : "Retry"}
+          </button>
+        ) : null}
+      </div>
+    );
   }
 
   const showFallback = Boolean(error);
