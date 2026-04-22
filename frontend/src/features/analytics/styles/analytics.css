@@ -70,69 +70,6 @@
   gap: 12px;
 }
 
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.kpi-card {
-  border: 1px solid var(--analytics-border);
-  border-radius: 10px;
-  background: #fff;
-  padding: 12px;
-}
-
-.kpi-card h3 {
-  margin: 0;
-  color: var(--analytics-text);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.kpi-card p {
-  margin: 8px 0 0;
-  color: var(--analytics-title);
-  font-size: 1.45rem;
-  font-weight: 700;
-}
-
-.chart-state {
-  display: grid;
-  place-items: center;
-  min-height: 220px;
-  border: 1px dashed var(--analytics-border);
-  border-radius: 10px;
-  background: var(--analytics-placeholder-bg);
-  color: var(--analytics-text);
-  font-weight: 600;
-  text-align: center;
-  padding: 16px;
-}
-
-.chart-state--error {
-  color: #991b1b;
-  background: #fef2f2;
-  border-color: #fecaca;
-}
-
-.time-series-chart {
-  width: 100%;
-  min-height: 320px;
-  border: 1px solid var(--analytics-border);
-  border-radius: 10px;
-  background: #fff;
-  padding: 8px;
-}
-
-.context-chart-panel {
-  width: 100%;
-  border: 1px solid var(--analytics-border);
-  border-radius: 10px;
-  background: #fff;
-  padding: 8px;
-}
-
 @media (min-width: 768px) {
   :root {
     --analytics-padding: 28px;
@@ -155,10 +92,6 @@
 
   .analytics-section--context {
     grid-column: span 4;
-  }
-
-  .kpi-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -187,13 +120,5 @@
 
   .analytics-grid__split {
     gap: 14px;
-  }
-
-  .time-series-chart {
-    padding: 12px;
-  }
-
-  .context-chart-panel {
-    padding: 12px;
   }
 }

@@ -1,58 +1,8 @@
-import { useEffect, useState } from "react";
 import "../styles/analytics.css";
 import { AnalyticsSection } from "../components/AnalyticsSection";
-import { TimeSeriesTrendChart } from "../components/TimeSeriesTrendChart";
-import { KpiCards } from "../components/KpiCards";
-import { IndianContextCharts } from "../components/IndianContextCharts";
-import { fetchAnalyticsSnapshot } from "../services/analyticsApi";
-
-const POLLING_MS = 60000;
+import { PlaceholderPanel } from "../components/PlaceholderPanel";
 
 export function AnalyticsDashboard() {
-  const [kpis, setKpis] = useState({});
-  const [trendData, setTrendData] = useState([]);
-  const [contextData, setContextData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    let isActive = true;
-
-    async function fetchAnalyticsData() {
-      try {
-        if (isActive) {
-          setError("");
-        }
-
-        const snapshot = await fetchAnalyticsSnapshot();
-
-        if (!isActive) {
-          return;
-        }
-
-        setKpis(snapshot.kpis);
-        setTrendData(snapshot.trendData);
-        setContextData(snapshot.contextData);
-      } catch (err) {
-        if (isActive) {
-          setError("Analytics API unavailable. Showing fallback trend data.");
-        }
-      } finally {
-        if (isActive) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    fetchAnalyticsData();
-    const intervalId = setInterval(fetchAnalyticsData, POLLING_MS);
-
-    return () => {
-      isActive = false;
-      clearInterval(intervalId);
-    };
-  }, []);
-
   return (
     <main className="analytics-page" aria-label="Analytics dashboard">
       <header className="analytics-page__header">
@@ -69,7 +19,7 @@ export function AnalyticsDashboard() {
           title="KPI Snapshot"
           description="Top-level cards for accident totals and hazard highlights"
         >
-          <KpiCards data={kpis} isLoading={isLoading} error={error} />
+          <PlaceholderPanel label="KPI Cards Placeholder" minHeight={160} />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -77,7 +27,7 @@ export function AnalyticsDashboard() {
           title="Accident Trend by Time"
           description="Line chart area for morning, afternoon, evening, and night trends"
         >
-          <TimeSeriesTrendChart data={trendData} isLoading={isLoading} error={error} />
+          <PlaceholderPanel label="Time-Series Chart Placeholder" minHeight={320} />
         </AnalyticsSection>
 
         <AnalyticsSection
@@ -85,7 +35,10 @@ export function AnalyticsDashboard() {
           title="Indian Context Correlations"
           description="Pie and bar charts for wrong-way, potholes, and severity context"
         >
-          <IndianContextCharts data={contextData} isLoading={isLoading} error={error} />
+          <div className="analytics-grid__split">
+            <PlaceholderPanel label="Pie Chart Placeholder" minHeight={280} />
+            <PlaceholderPanel label="Bar Chart Placeholder" minHeight={280} />
+          </div>
         </AnalyticsSection>
       </section>
     </main>
