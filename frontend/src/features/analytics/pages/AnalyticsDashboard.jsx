@@ -15,9 +15,19 @@ export function AnalyticsDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
+  const [nextRefreshInSeconds, setNextRefreshInSeconds] = useState(
+    Math.floor(POLLING_INTERVAL_MS / 1000)
+  );
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const isMountedRef = useRef(true);
+
+  function formatCountdown(seconds) {
+    const safeSeconds = Math.max(0, Number(seconds) || 0);
+    const minutes = String(Math.floor(safeSeconds / 60)).padStart(2, "0");
+    const remainingSeconds = String(safeSeconds % 60).padStart(2, "0");
+    return `${minutes}:${remainingSeconds}`;
+  }
 
   const loadAnalytics = useCallback(async ({ showLoader = false } = {}) => {
     if (showLoader && isMountedRef.current) {
@@ -41,6 +51,7 @@ export function AnalyticsDashboard() {
       setContextData(snapshot.contextData);
       setWarning(snapshot.warning || "");
       setLastUpdatedAt(new Date());
+      setNextRefreshInSeconds(Math.floor(POLLING_INTERVAL_MS / 1000));
     } catch (requestError) {
       if (isMountedRef.current) {
         setError("Analytics API unavailable. Showing fallback where possible.");
@@ -63,10 +74,14 @@ export function AnalyticsDashboard() {
     isMountedRef.current = true;
     loadAnalytics({ showLoader: true });
     const intervalId = setInterval(loadAnalytics, POLLING_INTERVAL_MS);
+    const tickerId = setInterval(() => {
+      setNextRefreshInSeconds((current) => Math.max(0, current - 1));
+    }, 1000);
 
     return () => {
       isMountedRef.current = false;
       clearInterval(intervalId);
+      clearInterval(tickerId);
     };
   }, [loadAnalytics]);
 
@@ -100,6 +115,9 @@ export function AnalyticsDashboard() {
             {lastUpdatedAt
               ? `Last updated: ${lastUpdatedAt.toLocaleTimeString()}`
               : "Waiting for first data sync..."}
+          </span>
+          <span className="analytics-next-refresh">
+            Next auto-refresh in {formatCountdown(nextRefreshInSeconds)}
           </span>
         </div>
         {warning ? (
