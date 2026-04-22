@@ -37,6 +37,7 @@ export function AnalyticsDashboard() {
       setKpis(snapshot.kpis);
       setTrendData(snapshot.trendData);
       setContextData(snapshot.contextData);
+      setError(snapshot.warning || "");
       setLastUpdatedAt(new Date());
     } catch (requestError) {
       if (isMountedRef.current) {
