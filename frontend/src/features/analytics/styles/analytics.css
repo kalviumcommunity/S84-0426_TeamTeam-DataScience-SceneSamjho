@@ -173,6 +173,26 @@
   background: #fff;
   padding: 8px;
 }
+
+.context-chart-panel__title {
+  margin: 2px 0 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--analytics-title);
+}
+
+.context-chart-panel__empty {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border: 1px dashed var(--analytics-border);
+  border-radius: 8px;
+  background: var(--analytics-placeholder-bg);
+  color: var(--analytics-text);
+  font-weight: 600;
+  text-align: center;
+  padding: 12px;
+}
 @media (min-width: 768px) {
   :root {
     --analytics-padding: 28px;
