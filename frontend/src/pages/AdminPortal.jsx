@@ -190,7 +190,8 @@ const AdminPortal = () => {
                 placeholder="Provide details about the incident scene..."
                 value={formData.description}
                 onChange={handleChange}
-                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                disabled={isSubmitting}
+                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.description ? 'border-red-500' : 'border-gray-300'} ${isSubmitting ? 'bg-gray-100 cursor-not-allowed opacity-70' : ''}`}
               ></textarea>
               {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
             </div>
