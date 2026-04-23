@@ -107,40 +107,40 @@ const AdminPortal = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <label className={`block text-sm font-medium mb-1 ${errors.date ? 'text-red-600' : 'text-gray-700'}`}>Date</label>
               <input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.date ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
               />
               {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
             </div>
 
             {/* Time */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+              <label className={`block text-sm font-medium mb-1 ${errors.time ? 'text-red-600' : 'text-gray-700'}`}>Time</label>
               <input
                 type="time"
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.time ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
               />
               {errors.time && <p className="text-red-500 text-xs mt-1">{errors.time}</p>}
             </div>
 
             {/* Location */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <label className={`block text-sm font-medium mb-1 ${errors.location ? 'text-red-600' : 'text-gray-700'}`}>Location</label>
               <input
                 type="text"
                 name="location"
                 placeholder="E.g., Intersection of MG Road and Brigade Road"
                 value={formData.location}
                 onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.location ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.location ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
               />
               {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
             </div>
