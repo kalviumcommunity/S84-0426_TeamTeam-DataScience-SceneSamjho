@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import apiClient from '../services/apiClient';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 const AdminPortal = () => {
@@ -53,8 +53,8 @@ const AdminPortal = () => {
     const loadingToastId = toast.loading('Submitting accident report...');
 
     try {
-      // Connect to Avinash's endpoint
-      await axios.post('/api/v1/accidents', formData);
+      // Connect using dedicated API Service instead of raw Axios endpoint
+      await apiClient.post('/accidents', formData);
       
       toast.success('Accident report successfully submitted!', { id: loadingToastId });
       setFormData(initialFormState); // Reset form
