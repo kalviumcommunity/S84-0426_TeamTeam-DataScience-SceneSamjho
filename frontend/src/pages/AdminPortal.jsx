@@ -60,8 +60,7 @@ const AdminPortal = () => {
       setFormData(initialFormState); // Reset form
     } catch (error) {
       console.error('Submission error:', error);
-      const errorMsg = error.response?.data?.message || 'Failed to submit report. Please try again.';
-      toast.error(errorMsg, { id: loadingToastId });
+      toast.error(error.parsedMessage || 'Failed to submit report. Please try again.', { id: loadingToastId });
     } finally {
       setIsSubmitting(false);
     }
