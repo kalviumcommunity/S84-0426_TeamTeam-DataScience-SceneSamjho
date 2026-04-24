@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from api import router as api_router
+import logging
 
 app = FastAPI(
     title="Traffic Accident Insights API",
@@ -19,6 +21,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Global exception handler to ensure CORS headers are sent even on 500 errors
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "detail": str(exc)},
+        headers={
+            "Access-Control-Allow-Origin": "https://team-team-scene.vercel.app",
+            "Access-Control-Allow-Credentials": "true",
+        }
+    )
 
 # Disable strict slashes so /path/ and /path work the same way
 app.router.redirect_slashes = False
