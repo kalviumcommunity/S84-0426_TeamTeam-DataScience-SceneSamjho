@@ -8,8 +8,15 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Create asynchronous engine
-engine = create_async_engine(DATABASE_URL, echo=True)
+# Create asynchronous engine with specific arguments for PgBouncer compatibility
+engine = create_async_engine(
+    DATABASE_URL, 
+    echo=True,
+    connect_args={
+        "prepared_statement_cache_size": 0,
+        "statement_cache_size": 0
+    }
+)
 
 # Create session maker attached to the async engine
 AsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
