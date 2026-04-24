@@ -185,6 +185,48 @@ export function AnalyticsDashboard() {
         ? `Analytics updated at ${lastUpdatedAt.toLocaleTimeString()}`
         : "Waiting for initial analytics sync";
 
+  const dashboardStatus = (() => {
+    if (isLoading) {
+      return {
+        label: "Initial sync",
+        className: "analytics-status-pill analytics-status-pill--loading",
+      };
+    }
+
+    if (isRefreshing) {
+      return {
+        label: "Refreshing",
+        className: "analytics-status-pill analytics-status-pill--loading",
+      };
+    }
+
+    if (error) {
+      return {
+        label: "Degraded",
+        className: "analytics-status-pill analytics-status-pill--error",
+      };
+    }
+
+    if (warning) {
+      return {
+        label: "Partial data",
+        className: "analytics-status-pill analytics-status-pill--warning",
+      };
+    }
+
+    if (isAutoRefreshPaused) {
+      return {
+        label: "Paused",
+        className: "analytics-status-pill analytics-status-pill--paused",
+      };
+    }
+
+    return {
+      label: "Healthy",
+      className: "analytics-status-pill analytics-status-pill--ok",
+    };
+  })();
+
   return (
     <main className="analytics-page" aria-label="Analytics dashboard" aria-busy={isLoading || isRefreshing}>
       <header className="analytics-page__header">
@@ -202,6 +244,9 @@ export function AnalyticsDashboard() {
           >
             {isRefreshing ? "Refreshing..." : "Refresh now"}
           </button>
+          <span className={dashboardStatus.className} role="status" aria-live="polite">
+            Status: {dashboardStatus.label}
+          </span>
           <span className="analytics-last-updated">
             {lastUpdatedAt
               ? `Last updated: ${lastUpdatedAt.toLocaleTimeString()}`

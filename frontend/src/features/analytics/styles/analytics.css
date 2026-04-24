@@ -77,6 +77,48 @@
   font-weight: 500;
 }
 
+.analytics-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  font-size: 0.79rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  letter-spacing: 0.01em;
+}
+
+.analytics-status-pill--ok {
+  color: #166534;
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.analytics-status-pill--loading {
+  color: #1e3a8a;
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.analytics-status-pill--warning {
+  color: #92400e;
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.analytics-status-pill--error {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.analytics-status-pill--paused {
+  color: #4c1d95;
+  background: #f5f3ff;
+  border-color: #c4b5fd;
+}
+
 .analytics-next-refresh {
   color: #1d4ed8;
   font-size: 0.86rem;
