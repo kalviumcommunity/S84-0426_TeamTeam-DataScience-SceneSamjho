@@ -3,11 +3,16 @@ const KPI_ITEMS = [
   { key: "total_fatalities", label: "Total Fatalities", valueType: "number" },
   { key: "top_hazard_weather", label: "Top Hazard Weather", valueType: "text" },
   { key: "top_hazard_road", label: "Top Hazard Road", valueType: "text" },
+  { key: "dui_percentage", label: "DUI / Alcohol %", valueType: "percent" },
 ];
 
 function formatKpiValue(value, valueType) {
   if (value === null || value === undefined || value === "") {
     return "N/A";
+  }
+
+  if (valueType === "percent" && typeof value === "number") {
+    return `${value}%`;
   }
 
   if (valueType === "number" && typeof value === "number") {

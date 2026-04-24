@@ -30,11 +30,15 @@ def get_kpis(df: pd.DataFrame) -> dict:
     else:
         top_hazard_road = "N/A"
         
+    dui_accidents = int(df['dui_alcohol'].sum())
+    dui_percentage = round((dui_accidents / total_accidents) * 100, 1) if total_accidents > 0 else 0
+        
     return {
         "total_accidents": total_accidents,
         "total_fatalities": total_fatalities,
         "top_hazard_weather": top_hazard_weather,
-        "top_hazard_road": top_hazard_road
+        "top_hazard_road": top_hazard_road,
+        "dui_percentage": dui_percentage
     }
 
 def get_time_trends(df: pd.DataFrame) -> list:
@@ -71,10 +75,30 @@ def get_indian_context(df: pd.DataFrame) -> dict:
     # Impact of weather conditions
     weather_dist = df['weather'].value_counts().to_dict()
     
+    # Vehicle Types
+    vehicle_types = df['vehicle_type'].value_counts().to_dict()
+    
+    # Driver Age Demographics
+    bins = [0, 25, 40, 60, 100]
+    labels = ['Under 25', '26-40', '41-60', 'Over 60']
+    df['age_group'] = pd.cut(df['driver_age'], bins=bins, labels=labels, right=True)
+    age_dist = df['age_group'].value_counts().to_dict()
+    
+    # Safety Gear vs Severity
+    safety_crosstab = pd.crosstab(df['helmet_seatbelt'], df['severity']).to_dict(orient='index')
+    safety_gear_impact = {("Safety Gear Used" if k else "No Safety Gear"): v for k, v in safety_crosstab.items()}
+    
+    # Ambulance ETA
+    eta_dist = df['ambulance_eta'].value_counts().to_dict()
+    
     return {
         "stray_animals_accidents": stray_animals_accidents,
         "wrong_way_accidents": wrong_way_accidents,
         "pothole_related": pothole_related,
         "severity_distribution_wrong_way": severity_dist_ww,
-        "weather_impact": weather_dist
+        "weather_impact": weather_dist,
+        "vehicle_types": vehicle_types,
+        "age_distribution": age_dist,
+        "safety_gear_impact": safety_gear_impact,
+        "ambulance_eta_dist": eta_dist
     }
