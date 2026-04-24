@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './App.css'
 import Sidebar from './components/Sidebar';
 import AdminPortal from './pages/AdminPortal';
 import { AnalyticsDashboard } from './features/analytics';
