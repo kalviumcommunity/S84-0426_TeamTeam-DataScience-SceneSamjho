@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import apiClient from '../services/apiClient';
+import { CheckCircle2, AlertCircle, Calendar, Clock, MapPin, AlertTriangle, Activity, Car, Cloud, FileText, Send, ShieldAlert, Loader2 } from 'lucide-react';
 
 const AdminPortal = () => {
   const initialFormState = {
@@ -15,7 +16,6 @@ const AdminPortal = () => {
 
   const [formData, setFormData] = useState(initialFormState);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validate = () => {
@@ -50,154 +50,229 @@ const AdminPortal = () => {
     }
 
     setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
+    const loadingToastId = toast.loading('Submitting accident report...');
 
     try {
-      // Connect to Avinash's endpoint
-      await axios.post('/api/v1/accidents', formData);
+      // Connect using dedicated API Service instead of raw Axios endpoint
+      await apiClient.post('/accidents', formData);
       
-      setStatus({ type: 'success', message: 'Accident report successfully submitted!' });
+      toast.success('Accident report successfully submitted!', { id: loadingToastId });
       setFormData(initialFormState); // Reset form
     } catch (error) {
       console.error('Submission error:', error);
-      setStatus({ 
-        type: 'error', 
-        message: error.response?.data?.message || 'Failed to submit report. Please try again.' 
-      });
+      toast.error(error.parsedMessage || 'Failed to submit report. Please try again.', { id: loadingToastId });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">New Accident Report</h2>
-        <p className="text-gray-600 mt-2">Enter the details of the incident below to ingest data into the system.</p>
+    <div className="max-w-5xl mx-auto px-4 py-8 lg:py-10 animate-fade-in">
+      {/* Header Section */}
+      <div className="mb-10 flex items-center gap-5">
+        <div className="p-4 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl shadow-lg shadow-indigo-200">
+          <ShieldAlert className="w-8 h-8" />
+        </div>
+        <div>
+          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Accident Report Portal</h2>
+          <p className="text-slate-500 mt-1 font-medium text-lg">Securely log critical incident data.</p>
+        </div>
       </div>
 
-      {status.message && (
-        <div className={`p-4 rounded-lg mb-6 flex items-center space-x-3 ${status.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
-          {status.type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
-          <span>{status.message}</span>
-        </div>
-      )}
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Date */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.date ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Context Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-indigo-500" /> 
+              Time & Location
+            </h3>
+          </div>
+          <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Date <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input 
+                  type="date" 
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  required
+                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} ${errors.date ? 'border-red-400 focus:ring-red-500/20' : 'border-slate-200'}`}
+                />
+              </div>
             </div>
-
-            {/* Time */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.time ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.time && <p className="text-red-500 text-xs mt-1">{errors.time}</p>}
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Time <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input 
+                  type="time" 
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  required
+                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
+                />
+              </div>
             </div>
-
-            {/* Location */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-              <input
-                type="text"
+            <div className="md:col-span-2 space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Exact Location <span className="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                placeholder="Enter precise location coordinates or address..."
                 name="location"
-                placeholder="E.g., Intersection of MG Road and Brigade Road"
                 value={formData.location}
                 onChange={handleChange}
-                className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.location ? 'border-red-500' : 'border-gray-300'}`}
+                disabled={isSubmitting}
+                required
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
               />
-              {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location}</p>}
             </div>
+          </div>
+        </div>
 
-            {/* Severity Dropdown */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Severity</label>
-              <select
-                name="severity"
-                value={formData.severity}
-                onChange={handleChange}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-              >
-                <option value="minor">Minor (No injuries)</option>
-                <option value="moderate">Moderate (Minor injuries, vehicle damage)</option>
-                <option value="severe">Severe (Major injuries/fatalities)</option>
-              </select>
+        {/* Severity & Details */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-500" /> 
+              Incident Parameters
+            </h3>
+          </div>
+          <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Severity Level <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <select 
+                  name="severity"
+                  value={formData.severity}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
+                >
+                  <option value="Minor">Minor</option>
+                  <option value="Moderate">Moderate</option>
+                  <option value="Severe">Severe</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </div>
             </div>
-
-            {/* Weather Dropdown */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Weather Conditions</label>
-              <select
-                name="weatherConditions"
-                value={formData.weatherConditions}
-                onChange={handleChange}
-                className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white"
-              >
-                <option value="clear">Clear</option>
-                <option value="rain">Rain</option>
-                <option value="fog">Fog</option>
-                <option value="snow">Snow/Ice</option>
-              </select>
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Accident Type <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <select 
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
+                >
+                  <option value="Collision">Collision</option>
+                  <option value="Rollover">Rollover</option>
+                  <option value="Pedestrian">Pedestrian</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
             </div>
-
-            {/* Stray Animals Checkbox */}
-            <div className="md:col-span-2 flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <input
-                type="checkbox"
-                id="strayAnimalsInvolved"
-                name="strayAnimalsInvolved"
-                checked={formData.strayAnimalsInvolved}
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Vehicles Involved</label>
+              <input 
+                type="number" 
+                min="1"
+                name="vehicles"
+                value={formData.vehicles}
                 onChange={handleChange}
-                className="w-5 h-5 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+                disabled={isSubmitting}
+                className={`w-full px-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
               />
-              <label htmlFor="strayAnimalsInvolved" className="text-sm font-medium text-gray-700 cursor-pointer">
-                Stray Animals Involved (Check if yes)
-              </label>
             </div>
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-slate-700">Weather Conditions</label>
+              <div className="relative">
+                <Cloud className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <select 
+                  name="weather"
+                  value={formData.weather}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'} border-slate-200`}
+                >
+                  <option value="Clear">Clear</option>
+                  <option value="Rain">Rain</option>
+                  <option value="Snow">Snow</option>
+                  <option value="Fog">Fog</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            {/* Description */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description & Details</label>
+        {/* Description */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-indigo-500" /> 
+              Detailed Narrative
+            </h3>
+          </div>
+          <div className="p-8">
+            <div className="space-y-4">
               <textarea
                 name="description"
-                rows="4"
-                placeholder="Provide details about the incident scene..."
+                rows="5"
+                placeholder="Provide a comprehensive narrative of the incident..."
                 value={formData.description}
                 onChange={handleChange}
-                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all ${errors.description ? 'border-red-500' : 'border-gray-300'}`}
+                disabled={isSubmitting}
+                className={`w-full p-4 border rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-y ${errors.description ? 'border-red-400 focus:ring-red-500/20' : 'border-slate-200'} ${isSubmitting ? 'bg-slate-50 opacity-60 cursor-not-allowed' : 'bg-white hover:border-slate-300'}`}
               ></textarea>
-              {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+              {errors.description && <p className="text-red-500 text-sm font-medium flex items-center gap-1"><AlertCircle className="w-4 h-4" /> {errors.description}</p>}
+            </div>
+
+            <div className="mt-6 flex items-center gap-3 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100/50">
+              <input 
+                type="checkbox" 
+                id="injuries"
+                name="injuries"
+                checked={formData.injuries}
+                onChange={handleChange}
+                disabled={isSubmitting}
+                className={`w-5 h-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500 transition-all ${isSubmitting ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+              />
+              <label htmlFor="injuries" className="text-sm font-semibold text-slate-700 cursor-pointer select-none">
+                Flag as resulting in physical injuries
+              </label>
             </div>
           </div>
+        </div>
 
-          <div className="pt-4 flex justify-end">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Report'}
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Submit */}
+        <div className="pt-4 flex justify-end">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`relative group overflow-hidden px-8 py-4 bg-slate-900 text-white font-semibold rounded-xl hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-500/30 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-slate-900/20 hover:shadow-indigo-600/30 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <Send className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                Submit Report to Database
+              </>
+            )}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
