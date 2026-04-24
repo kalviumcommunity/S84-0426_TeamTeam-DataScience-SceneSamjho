@@ -8,14 +8,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Set up CORS so the React frontend can communicate with our API without getting blocked
+# Set up CORS so the React frontend can communicate with our API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For development, we allow all ports (e.g., localhost:3000)
+    allow_origins=[
+        "http://localhost:5173",
+        "https://team-team-scene.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Disable strict slashes so /path/ and /path work the same way
+app.router.redirect_slashes = False
 
 # Register our entry routes
 app.include_router(api_router, prefix="/api/v1")

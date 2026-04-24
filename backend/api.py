@@ -9,7 +9,7 @@ from schemas import AccidentCreate
 
 router = APIRouter()
 
-@router.post("/accidents/", status_code=status.HTTP_201_CREATED)
+@router.post("/accidents", status_code=status.HTTP_201_CREATED)
 async def create_accident(accident_in: AccidentCreate, db: AsyncSession = Depends(get_db)):
     """
     Receives a new accident report from the React Admin Form and inserts it into PostgreSQL.
@@ -26,7 +26,7 @@ async def create_accident(accident_in: AccidentCreate, db: AsyncSession = Depend
 
 # --- Analytics Endpoints ---
 
-@router.get("/analytics/kpis/", response_model=dict)
+@router.get("/analytics/kpis", response_model=dict)
 async def get_kpis_endpoint(db: AsyncSession = Depends(get_db)):
     """Fetch high-level KPI dashboard metrics"""
     result = await db.execute(select(Accident))
@@ -38,7 +38,7 @@ async def get_kpis_endpoint(db: AsyncSession = Depends(get_db)):
     df = pd.DataFrame([{c.name: getattr(r, c.name) for c in r.__table__.columns} for r in records])
     return analytics.get_kpis(df)
 
-@router.get("/analytics/trends/", response_model=list)
+@router.get("/analytics/trends", response_model=list)
 async def get_trends_endpoint(db: AsyncSession = Depends(get_db)):
     """Fetch time block trends to populate Recharts graphs"""
     result = await db.execute(select(Accident))
@@ -49,7 +49,7 @@ async def get_trends_endpoint(db: AsyncSession = Depends(get_db)):
     df = pd.DataFrame([{c.name: getattr(r, c.name) for c in r.__table__.columns} for r in records])
     return analytics.get_time_trends(df)
 
-@router.get("/analytics/indian-context/", response_model=dict)
+@router.get("/analytics/indian-context", response_model=dict)
 async def get_indian_context_endpoint(db: AsyncSession = Depends(get_db)):
     """Analyze localized elements: wrong way driving, stray animals, potholes"""
     result = await db.execute(select(Accident))
