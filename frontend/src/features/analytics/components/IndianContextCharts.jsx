@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import {
   ResponsiveContainer,
   PieChart,
@@ -114,7 +115,7 @@ function getTopHazard(hazardData) {
   );
 }
 
-export function IndianContextCharts({
+export const IndianContextCharts = memo(function IndianContextCharts({
   data = {},
   isLoading = false,
   error = "",
@@ -143,14 +144,14 @@ export function IndianContextCharts({
     );
   }
 
-  const hazardData = getHazardBreakdown(data);
-  const severityData = getWrongWaySeverityData(data);
-  const weatherData = getWeatherImpactData(data);
+  const hazardData = useMemo(() => getHazardBreakdown(data), [data]);
+  const severityData = useMemo(() => getWrongWaySeverityData(data), [data]);
+  const weatherData = useMemo(() => getWeatherImpactData(data), [data]);
   
-  const vehicleData = getVehicleTypeData(data);
-  const ageData = getAgeDistributionData(data);
-  const safetyData = getSafetyGearData(data);
-  const ambulanceData = getAmbulanceEtaData(data);
+  const vehicleData = useMemo(() => getVehicleTypeData(data), [data]);
+  const ageData = useMemo(() => getAgeDistributionData(data), [data]);
+  const safetyData = useMemo(() => getSafetyGearData(data), [data]);
+  const ambulanceData = useMemo(() => getAmbulanceEtaData(data), [data]);
 
   const hasHazardData = hazardData.some((item) => item.value > 0);
   const hasSeverityData = severityData.length > 0;
@@ -160,9 +161,9 @@ export function IndianContextCharts({
   const hasSafetyData = safetyData.length > 0;
   const hasAmbulanceData = ambulanceData.length > 0;
 
-  const topHazard = getTopHazard(hazardData);
-  const totalHazardIncidents = hazardData.reduce((sum, item) => sum + item.value, 0);
-  const totalWrongWayIncidents = severityData.reduce((sum, item) => sum + item.count, 0);
+  const topHazard = useMemo(() => getTopHazard(hazardData), [hazardData]);
+  const totalHazardIncidents = useMemo(() => hazardData.reduce((sum, item) => sum + item.value, 0), [hazardData]);
+  const totalWrongWayIncidents = useMemo(() => severityData.reduce((sum, item) => sum + item.count, 0), [severityData]);
 
   if (!hasHazardData && !hasSeverityData && !hasWeatherData && !hasVehicleData) {
     return <div className="chart-state">No context data available yet.</div>;
@@ -188,6 +189,9 @@ export function IndianContextCharts({
                 cy="50%"
                 outerRadius={82}
                 label
+                animationBegin={0}
+                animationDuration={1000}
+                animationEasing="ease-out"
               >
                 {hazardData.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
@@ -217,7 +221,14 @@ export function IndianContextCharts({
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
               <Tooltip formatter={(value) => [`${formatCount(value)} incidents`, "Count"]} />
               <Legend />
-              <Bar dataKey="count" name="Wrong-way Cases" fill="#7c3aed" radius={[8, 8, 0, 0]} />
+              <Bar 
+                dataKey="count" 
+                name="Wrong-way Cases" 
+                fill="#7c3aed" 
+                radius={[8, 8, 0, 0]} 
+                animationBegin={0}
+                animationDuration={1000}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -240,7 +251,14 @@ export function IndianContextCharts({
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
               <Tooltip formatter={(value) => [`${formatCount(value)} incidents`, "Count"]} />
               <Legend />
-              <Bar dataKey="count" name="Weather Conditions" fill="#2dd4bf" radius={[8, 8, 0, 0]} />
+              <Bar 
+                dataKey="count" 
+                name="Weather Conditions" 
+                fill="#2dd4bf" 
+                radius={[8, 8, 0, 0]} 
+                animationBegin={0}
+                animationDuration={1000}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -256,7 +274,18 @@ export function IndianContextCharts({
         {hasVehicleData ? (
           <ResponsiveContainer width="100%" height={260}>
             <PieChart>
-              <Pie data={vehicleData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={82} label>
+              <Pie 
+                data={vehicleData} 
+                dataKey="value" 
+                nameKey="name" 
+                cx="50%" 
+                cy="50%" 
+                outerRadius={82} 
+                label
+                animationBegin={0}
+                animationDuration={1000}
+                animationEasing="ease-out"
+              >
                 {vehicleData.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                 ))}
@@ -283,7 +312,14 @@ export function IndianContextCharts({
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
               <Tooltip formatter={(value) => [`${formatCount(value)} incidents`, "Count"]} />
               <Legend />
-              <Bar dataKey="count" name="Drivers" fill="#f59e0b" radius={[8, 8, 0, 0]} />
+              <Bar 
+                dataKey="count" 
+                name="Drivers" 
+                fill="#f59e0b" 
+                radius={[8, 8, 0, 0]} 
+                animationBegin={0}
+                animationDuration={1000}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -304,9 +340,9 @@ export function IndianContextCharts({
               <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="Fatal" stackId="a" fill="#dc2626" />
-              <Bar dataKey="Major" stackId="a" fill="#f59e0b" />
-              <Bar dataKey="Minor" stackId="a" fill="#22c55e" />
+              <Bar dataKey="Fatal" stackId="a" fill="#dc2626" animationBegin={0} animationDuration={1000} />
+              <Bar dataKey="Major" stackId="a" fill="#f59e0b" animationBegin={0} animationDuration={1000} />
+              <Bar dataKey="Minor" stackId="a" fill="#22c55e" animationBegin={0} animationDuration={1000} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -322,7 +358,19 @@ export function IndianContextCharts({
         {hasAmbulanceData ? (
           <ResponsiveContainer width="100%" height={260}>
             <PieChart>
-              <Pie data={ambulanceData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={82} label>
+              <Pie 
+                data={ambulanceData} 
+                dataKey="value" 
+                nameKey="name" 
+                cx="50%" 
+                cy="50%" 
+                innerRadius={50} 
+                outerRadius={82} 
+                label
+                animationBegin={0}
+                animationDuration={1000}
+                animationEasing="ease-out"
+              >
                 {ambulanceData.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={CHART_COLORS[(index + 2) % CHART_COLORS.length]} />
                 ))}
@@ -338,4 +386,4 @@ export function IndianContextCharts({
 
     </div>
   );
-}
+});
