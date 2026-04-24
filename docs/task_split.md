@@ -33,7 +33,7 @@ To ensure parallel development and avoid Git merge conflicts, the project has be
 *   **Task 5: API Integration (POST Logic):** Use `axios` or `fetch` to connect the React form to Avinash’s `/api/v1/accidents` endpoint. Implement success/error handling (e.g., UI Toast notifications upon successful database entry).
 
 ### 👩‍💻 Akanksha: Data Visualization Integration & BI Dashboard
-*Role Focus: Consuming backend analytics APIs and translating JSON data into interactive business intelligence (BI) charts.*
+*Role Focus: Consuming backend analytics APIs and translating JSON data into interactive business intellig  ence (BI) charts.*
 
 *   **Task 1: Analytics View Layout Architecture:** Design and build the grid-based responsive layout for the main Analytics Dashboard where all data will be displayed.
 *   **Task 2: KPI Card Components:** Build the dynamic top-level statistical cards (e.g., "Total Accidents", "High Risk Weather") that consume data from the backend KPI endpoint.

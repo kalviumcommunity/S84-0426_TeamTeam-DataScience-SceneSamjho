@@ -4,7 +4,7 @@ import { LayoutDashboard, FilePlus2, Settings, BarChart3, Database } from 'lucid
 
 const Sidebar = () => {
   return (
-    <aside className="w-full h-full bg-slate-900 border-r border-slate-800 flex flex-col text-slate-300">
+    <aside className="w-72 h-full shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col text-slate-300">
       <div className="p-6 border-b border-slate-800 shrink-0 flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
           <Database className="w-5 h-5 text-white" />

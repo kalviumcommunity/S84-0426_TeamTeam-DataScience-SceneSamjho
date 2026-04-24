@@ -8,10 +8,12 @@ const AdminPortal = () => {
     date: '',
     time: '',
     location: '',
-    severity: 'minor',
-    strayAnimalsInvolved: false,
-    weatherConditions: 'clear',
-    description: ''
+    severity: 'Minor',
+    type: 'Collision',
+    vehicles: '1',
+    weather: 'Clear',
+    description: '',
+    injuries: false
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -53,8 +55,26 @@ const AdminPortal = () => {
     const loadingToastId = toast.loading('Submitting accident report...');
 
     try {
+      const submitPayload = {
+        incident_date: formData.date,
+        incident_time: formData.time.length === 5 ? formData.time + ':00' : formData.time,
+        road_type: 'City Junction',
+        location_zone: formData.location.substring(0, 50), // Ensure location fits standard String(50) Postgres length
+        weather: formData.weather,
+        road_condition: 'Dry',
+        stray_animals: false,
+        wrong_way: false,
+        overloaded: Number(formData.vehicles) > 2,
+        dui_alcohol: false,
+        helmet_seatbelt: false,
+        vehicle_type: formData.type === 'Pedestrian' ? 'Pedestrian' : 'Car',
+        driver_age: 30,
+        severity: formData.severity,
+        ambulance_eta: formData.injuries ? '< 15 mins' : 'N/A'
+      };
+
       // Connect using dedicated API Service instead of raw Axios endpoint
-      await apiClient.post('/accidents', formData);
+      await apiClient.post('/accidents', submitPayload);
       
       toast.success('Accident report successfully submitted!', { id: loadingToastId });
       setFormData(initialFormState); // Reset form
