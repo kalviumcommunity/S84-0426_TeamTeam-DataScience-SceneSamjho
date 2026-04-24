@@ -58,6 +58,18 @@ function getWrongWaySeverityData(data) {
     .sort((a, b) => severitySortValue(a.severity) - severitySortValue(b.severity));
 }
 
+function getWeatherImpactData(data) {
+  const source = data.weather_impact || {};
+
+  return Object.keys(source)
+    .map((weather) => ({
+      weather: String(weather).trim(),
+      count: Number(source[weather]) || 0,
+    }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count);
+}
+
 function getTopHazard(hazardData) {
   return hazardData.reduce(
     (top, item) => (item.value > top.value ? item : top),

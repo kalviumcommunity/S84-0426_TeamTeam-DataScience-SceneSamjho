@@ -68,9 +68,13 @@ def get_indian_context(df: pd.DataFrame) -> dict:
     wrong_way_df = df[df['wrong_way'] == True]
     severity_dist_ww = wrong_way_df['severity'].value_counts().to_dict()
     
+    # Impact of weather conditions
+    weather_dist = df['weather'].value_counts().to_dict()
+    
     return {
         "stray_animals_accidents": stray_animals_accidents,
         "wrong_way_accidents": wrong_way_accidents,
         "pothole_related": pothole_related,
-        "severity_distribution_wrong_way": severity_dist_ww
+        "severity_distribution_wrong_way": severity_dist_ww,
+        "weather_impact": weather_dist
     }
