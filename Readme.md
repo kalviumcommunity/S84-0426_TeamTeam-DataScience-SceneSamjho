@@ -1,87 +1,91 @@
-🚦 Project: Traffic Accident Correlation Analysis
+# 🚦 Traffic Accident Correlation Analysis & Insights System
 
-Team Members:  Akanksha Kumari, Keshav Yadav,  Avinash Guleria
+**Team Members:** Akanksha Kumari, Keshav Yadav, Avinash Guleria
 
-1. The Problem: "Data Rich, Insight Poor."
+## 🚀 Live Demo
+- **Frontend:** [https://team-team-scene.vercel.app/](https://team-team-scene.vercel.app/)
+- **Backend API:** [https://s84-0426-team-team-data-science-sce-ten.vercel.app/](https://s84-0426-team-team-data-science-sce-ten.vercel.app/)
 
-Traffic police departments collect massive amounts of accident data every day. However, this data often sits idle in logs. Without analysis, interventions remain reactive (responding after an accident) rather than proactive (preventing one).
+## 1. The Problem: "Data Rich, Insight Poor."
+Traffic police departments routinely collect vast amounts of data on road accidents. However, this data is often archived without deep analysis. Critical correlations—such as how weather interacts with road types, or how time-of-day affects the severity of accidents involving specific vehicle types—remain undiscovered. Without analysis, interventions remain reactive rather than proactive.
 
-    Vague Goals: General safety campaigns are often broad and fail to address specific high-risk scenarios.
+## 2. The Solution
+This project is a full-stack, data-driven web application designed to transform raw accident logs into actionable intelligence. By capturing granular, localized data and utilizing Data Science processing, the system visualizes hidden patterns. 
 
-    Hidden Correlations: Patterns between road geometry, specific weather types, and time-of-day are invisible to the naked eye.
+The system is divided into two primary modules:
+*   **The Admin Portal (Data Ingestion):** A secure React-based form where traffic officers log new accident reports, capturing temporal, environmental, infrastructural, and human factors.
+*   **The Analytics Dashboard (Data Science & Visualization):** An interactive dashboard powered by React and Recharts, fueled by Pandas backend processing to display KPI metrics and trend visualizations.
 
-    Resource Misallocation: Without data, police resources might be deployed to low-risk areas while "death traps" go unmonitored.
+## 3. Technology Stack & Architecture
+*   **Frontend (Client-Side):** React.js, Vite, Tailwind CSS, Recharts.
+*   **Backend (API & Data Processing):** FastAPI (Python), Pandas & NumPy for data science processing, Pydantic for validation.
+*   **Database (Storage):** PostgreSQL (Hosted via Supabase), accessed via SQLAlchemy & Alembic.
+*   **Deployment:** Vercel (both Frontend and Backend).
 
-💡 2. The Solution: Question → Data → Insight
+---
 
-We apply the Data Science Lifecycle to move from raw evidence to targeted action.
-Phase A: The Question (Framing) 🎯
+## 4. Getting Started (Local Development)
 
-We don't just "look at data." We ask: "Which road types become high-risk hotspots specifically during monsoon weather at night?" This focus ensures every line of code we write serves a specific purpose.
-Phase B: Data as Evidence (Investigation) 🔍
+### Prerequisites
+*   **Python 3.9+**
+*   **Node.js 18+**
 
-We treat data as a witness. We investigate its provenance, cleaning messy logs and accounting for reporting biases. We combine:
+### Step 1: Database Setup
+Configure your `backend/.env` file with your Supabase connection string:
+```env
+DATABASE_URL=postgresql+asyncpg://user:password@host:port/dbname
+```
 
-    📝 Incident Logs: Severity, time, and location.
+### Step 2: Backend Setup
+1. Create and activate a virtual environment:
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   ```
+2. Install dependencies:
+   ```powershell
+   pip install -r backend/requirements.txt
+   ```
+3. Run database migrations:
+   ```powershell
+   alembic upgrade head
+   ```
+4. Seed dummy data (optional):
+   ```powershell
+   python data_pipeline/generate_dummy_db.py
+   ```
+5. Start the API server:
+   ```powershell
+   cd backend
+   uvicorn main:app --reload --port 8000
+   ```
 
-    🌦️ Weather Data: Historical climate matching.
+### Step 3: Frontend Setup
+1. Navigate to the frontend directory:
+   ```powershell
+   cd frontend
+   ```
+2. Install dependencies:
+   ```powershell
+   npm install
+   ```
+3. Start the dev server:
+   ```powershell
+   npm run dev
+   ```
 
-    🛣️ Infrastructure Info: Road surface and lighting quality.
+---
 
-Phase C: Actionable Insights (Intervention) 💡
+## 5. Deployment
 
-The end goal isn't a chart; it's an intervention.
+Both frontend and backend are optimized for deployment on **Vercel**. 
+*   **Backend:** Uses Vercel Serverless Functions via the `vercel.json` configuration in the `backend/` folder.
+*   **Frontend:** Deployed as a Vite React app.
+For full deployment instructions, please see [docs/deployment.md](docs/deployment.md).
 
-    Observation: Accidents spike on Route 10 when it rains.
-
-    Insight: Accidents spike because Route 10's "S-Curve" lacks drainage.
-
-    Targeted Action: Install high-friction surfacing and improved drainage at that specific curve.
-
-🛠️ 3. Technology Stack
-
-We utilize the standard Data Science "Starter Pack" to perform this analysis:
-
-    🐍 Language: Python – The backbone of modern data science.
-
-    📓 Environment: Jupyter Notebooks – For interactive, reproducible research.
-
-    📊 Libraries:
-
-        Pandas & NumPy: For data wrangling, cleaning, and handling the "messy" real-world logs.
-
-        Matplotlib & Seaborn: For statistical visualization to reveal hidden correlations between environment and accident frequency.
-        🛠️ Milestone 1: Development Environment Setup
-
-This section documents the local environment configuration required for the Traffic Accident Correlation Analysis project.
-💻 System Specifications
-
-    Operating System: Arch Linux (x86_64)
-
-    Package Manager: Miniconda3 (conda 26.1.1)
-
-    Shell: Zsh
-
-⚙️ Installation & Setup Steps
-
-    Miniconda Installation: Downloaded the Miniconda3 Linux 64-bit installer and initialized the shell integration for zsh.
-
-    Environment Creation: Created a isolated environment to ensure dependency stability:
-    Bash
-
-conda create -n team02_sprint3 python=3.11
-
-Tooling: Installed Jupyter Notebook within the environment for interactive data analysis:
-Bash
-
-    conda install jupyter
-
-✅ Verification & Validation
-
-The environment has been verified through the following terminal outputs:
-
-    Python Version: 3.11.15 (Verified inside team02_sprint3)
-
-    Conda Version: 26.1.1
-
-    Jupyter Functional Test: Successfully launched the Jupyter server and executed a Python 3 kernel test.
+## 6. Documentation Reference
+For deeper dives into the system architecture and design, please refer to the `docs/` directory:
+*   [System Description](docs/description.md)
+*   [High-Level Design (HLD)](docs/hld.md)
+*   [Low-Level Design (LLD)](docs/lld.md)
+*   [Task Split](docs/task_split.md)
