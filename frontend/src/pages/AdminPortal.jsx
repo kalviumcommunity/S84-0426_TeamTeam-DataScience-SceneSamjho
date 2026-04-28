@@ -87,28 +87,28 @@ const AdminPortal = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 lg:py-10 animate-fade-in">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 lg:py-10 animate-fade-in w-full overflow-hidden">
       {/* Header Section */}
-      <div className="mb-10 flex items-center gap-5">
-        <div className="p-4 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl shadow-lg shadow-indigo-200">
-          <ShieldAlert className="w-8 h-8" />
+      <div className="mb-8 md:mb-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+        <div className="p-3 sm:p-4 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl shadow-lg shadow-indigo-200 shrink-0">
+          <ShieldAlert className="w-7 h-7 sm:w-8 sm:h-8" />
         </div>
         <div>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Accident Report Portal</h2>
-          <p className="text-slate-500 mt-1 font-medium text-lg">Securely log critical incident data.</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Accident Report Portal</h2>
+          <p className="text-slate-500 mt-1 font-medium text-sm sm:text-lg">Securely log critical incident data.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 w-full">
         {/* Context Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
-            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-indigo-500" /> 
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md w-full">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-5 sm:px-8 py-4 sm:py-5">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-indigo-500 shrink-0" /> 
               Time & Location
             </h3>
           </div>
-          <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-5 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 w-full">
             <div className="space-y-3">
               <label className="block text-sm font-semibold text-slate-700">Date <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -156,14 +156,14 @@ const AdminPortal = () => {
         </div>
 
         {/* Severity & Details */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
-            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-orange-500" /> 
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md w-full">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-5 sm:px-8 py-4 sm:py-5">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-500 shrink-0" /> 
               Incident Parameters
             </h3>
           </div>
-          <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-5 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 w-full">
             <div className="space-y-3">
               <label className="block text-sm font-semibold text-slate-700">Severity Level <span className="text-red-500">*</span></label>
               <div className="relative">
@@ -234,14 +234,14 @@ const AdminPortal = () => {
         </div>
 
         {/* Description */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-          <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-5">
-            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-indigo-500" /> 
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md w-full">
+          <div className="border-b border-slate-100 bg-slate-50/80 px-5 sm:px-8 py-4 sm:py-5">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-indigo-500 shrink-0" /> 
               Detailed Narrative
             </h3>
           </div>
-          <div className="p-8">
+          <div className="p-5 sm:p-8 w-full">
             <div className="space-y-4">
               <textarea
                 name="description"
