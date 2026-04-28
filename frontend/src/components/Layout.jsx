@@ -28,9 +28,9 @@ const Layout = () => {
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
         
         {/* Scrollable Page Content */}
-        <main className="flex-1 overflow-y-auto w-full flex flex-col relative">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto w-full flex flex-col relative max-w-full">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] pointer-events-none z-0"></div>
-          <div className="flex-1 relative z-10 p-4 md:p-6 lg:p-8">
+          <div className="flex-1 relative z-10 w-full p-3 sm:p-5 md:p-8">
             <Outlet />
           </div>
           <div className="relative z-10">
